@@ -15,24 +15,21 @@ Public facing interfaces for kyber network (folder: contracts/sol6):
 
 
 ## Setup
-1. Clone repo
-2. `npm ci`
+- Clone repo
+- yarn
 
 ## Compilation
-`./cmp.sh`
+yarn compile
 
 ## Testing with Buidler
-1. If contracts have not been compiled, run `./cmp.sh`. This step can be skipped subsequently.
-2. Run full regression `./tst.sh`
-3. Use `-f` for running a specific test file.
+1. Compile if haven't done so yet.
+2. yarn test = Run full regression
 
-### Example Commands
-`yarn test`
-`./tst.sh -f ./test/sol4/kyberReserve.js` (Test only kyberReserve.js)
+### Single file regression
+`./tst.sh -f ./test/sol6/kyberNetwork.js`
 
-## Coverage with `buidler-coverage`
-1. yarn coverage or run `./coverage.sh`
-2. Use `-f` for running a specific test file.
+## Coverage
+yarn coverage
 
-### Example Commands
+### Single file coverage
 `./coverage.sh -f ./test/sol6/kyberNetwork.js` (Coverage for only kyberNetwork.js)
