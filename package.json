@@ -1,19 +1,11 @@
 {
-<<<<<<< HEAD
   "name": "kyber_protocol_sc",
   "version": "1.5.0",
   "description": "This repository has the main contracts for KyberNetwork protocol.",
-=======
-  "name": "smart-contracts",
-  "version": "1.0.0",
-  "description": "This repository has the main contracts for KyberNetwork protocol.",
-  "main": "truffle.js",
->>>>>>> 19a45922d776456fbbff330a6aeffdec4251ef9a
   "directories": {
     "test": "test"
   },
   "scripts": {
-<<<<<<< HEAD
     "test": "./tst.sh",
     "t": "./tst.sh",
     "compile": "./cmp.sh",
@@ -31,20 +23,6 @@
     "url": "https://github.com/KyberNetwork/kyber_protocol_sc/issues"
   },
   "homepage": "https://github.com/KyberNetwork/kyber_protocol_sc#readme",
-=======
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/KyberNetwork/smart-contracts.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/KyberNetwork/smart-contracts/issues"
-  },
-  "homepage": "https://github.com/KyberNetwork/smart-contracts#readme",
->>>>>>> 19a45922d776456fbbff330a6aeffdec4251ef9a
   "dependencies": {
     "chai-as-promised": "7.1.1",
     "compare-versions": "3.5.1",
@@ -52,22 +30,11 @@
     "ganache-cli": "6.8.2",
     "mathjs": "4.4.2",
     "rlp": "2.2.4",
-<<<<<<< HEAD
     "sha3": "2.1.1",
     "solc": "0.6.6",
     "solhint": "3.0.0-rc.8",
     "truffle-flattener": "1.4.2",
     "web3": "1.2.4",
-=======
-    "secp256k1": "3.8.0",
-    "sha3": "2.1.1",
-    "solc": "0.6.6",
-    "solhint": "3.0.0-rc.8",
-    "truffle-assertions": "0.7.2",
-    "truffle-flattener": "1.4.2",
-    "web3": "1.2.4",
-    "web3-utils": "1.2.4",
->>>>>>> 19a45922d776456fbbff330a6aeffdec4251ef9a
     "winston": "^3.3.3",
     "yargs": "11.1.1"
   },
@@ -76,20 +43,10 @@
     "@nomiclabs/buidler-truffle5": "1.3.0",
     "@nomiclabs/buidler-web3": "1.3.0",
     "@openzeppelin/test-helpers": "0.5.6",
-<<<<<<< HEAD
     "chai": "4.2.0",
     "chai-bn": "0.2.0",
     "got": "^11.1.0",
     "mv": "2.1.1",
-=======
-    "@uniswap/v2-periphery": "1.1.0-beta.0",
-    "chai": "4.2.0",
-    "chai-bn": "0.2.0",
-    "mv": "2.1.1",
-    "got": "^11.1.0",
-    "prettier": "2.0.4",
-    "prettier-plugin-solidity": "1.0.0-alpha.54",
->>>>>>> 19a45922d776456fbbff330a6aeffdec4251ef9a
     "solidity-coverage": "0.7.5"
   }
 }

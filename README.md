@@ -27,11 +27,11 @@ Public facing interfaces for kyber network (folder: contracts/sol6):
 3. Use `-f` for running a specific test file.
 
 ### Example Commands
-`./tst.sh`
+`yarn test`
 `./tst.sh -f ./test/sol4/kyberReserve.js` (Test only kyberReserve.js)
 
 ## Coverage with `buidler-coverage`
-1. Run `./coverage.sh`
+1. yarn coverage or run `./coverage.sh`
 2. Use `-f` for running a specific test file.
 
 ### Example Commands
