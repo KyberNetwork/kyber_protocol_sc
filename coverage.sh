@@ -7,9 +7,12 @@ done
 
 export NODE_OPTIONS=--max-old-space-size=4096
 
+<<<<<<< HEAD
 npx buidler clean
 npx buidler compile --config ./buidlerCoverageSol4.js
 
+=======
+>>>>>>> 19a45922d776456fbbff330a6aeffdec4251ef9a
 if [ -n "$FILE" ]
 then
     npx buidler coverage --config ./buidlerConfigSol6.js --testfiles $FILE --solcoverjs ".solcover.js" --temp ""
