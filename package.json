@@ -1,7 +1,7 @@
 {
   "name": "kyber_protocol_sc",
-  "version": "1.5.0",
-  "description": "This repository has the main contracts for KyberNetwork protocol.",
+  "version": "2.0.0",
+  "description": "This repository holds smart contracts for Kyber protocol. Including all tests.",
   "directories": {
     "test": "test"
   },
