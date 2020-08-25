@@ -22,7 +22,7 @@ install:
   - yarn install
 
 before_script:
-  - npx solhint "contracts/sol6/**/*.sol"
+  - yarn lint
 
 script:
   - ./cmp.sh
