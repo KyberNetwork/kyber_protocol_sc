@@ -25,7 +25,7 @@ Public facing interfaces for kyber network (folder: contracts/sol6):
 ## Compilation
 yarn compile
 
-## Testing with Buidler
+## Testing
 1. Compile if haven't done so yet.
 2. yarn test = Run full regression
 
