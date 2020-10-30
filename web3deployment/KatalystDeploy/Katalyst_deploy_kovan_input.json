@@ -1,0 +1,247 @@
+{
+    "reserveTypes": {
+        "FPR": 1,
+        "APR": 2,
+        "BRIDGE": 3,
+        "UTILITY": 4,
+        "CUSTOM": 5,
+        "ORDERBOOK": 6
+    },
+
+    "tokens": {
+        "BAT": {
+            "name": "DAI Stablecoin",
+            "decimals": 18,
+            "address": "0x9f8cfb61d3b2af62864408dd703f9c3beb55dff7"
+        },
+        "DAI": {
+            "name": "DAI Stablecoin",
+            "decimals": 18,
+            "address": "0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa"
+        },
+        "KNC": {
+            "name": "KyberNetwork",
+            "decimals": 18,
+            "address": "0xad67cB4d63C9da94AcA37fDF2761AaDF780ff4a2"
+        },
+        "MANA": {
+            "name": "MANA",
+            "decimals": 18,
+            "address": "0xcb78b457c1F79a06091EAe744aA81dc75Ecb1183"
+        },
+        "MKR": {
+            "name": "MKR",
+            "decimals": 18,
+            "address": "0xAaF64BFCC32d0F15873a02163e7E500671a4ffcD"
+        },
+        "OMG": {
+            "name": "OMG",
+            "decimals": 18,
+            "address": "0xdB7ec4E4784118D9733710e46F7C83fE7889596a"
+        },
+        "POLY": {
+            "name": "POLY",
+            "decimals": 18,
+            "address": "0xd92266fd053161115163a7311067F0A4745070b5"
+        },
+        "REP": {
+            "name": "REP",
+            "decimals": 18,
+            "address": "0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea"
+        },
+        "SALT": {
+            "name": "SALT",
+            "decimals": 18,
+            "address": "0x6fEE5727EE4CdCBD91f3A873ef2966dF31713A04"
+        },
+        "SNT": {
+            "name": "SNT",
+            "decimals": 18,
+            "address": "0x4c99B04682fbF9020Fcb31677F8D8d66832d3322"
+        },
+        "WETH": {
+            "name": "WETH",
+            "decimals": 18,
+            "address": "0xd0A1E359811322d97991E03f863a0C30C2cF029C"
+        },
+        "ZIL": {
+            "name": "ZIL",
+            "decimals": 18,
+            "address": "0xAb74653cac23301066ABa8eba62b9Abd8a8c51d6"
+        }
+    },
+
+    "addresses": {
+        "knc": "0xad67cB4d63C9da94AcA37fDF2761AaDF780ff4a2",
+        "gasHelper": "0x0000000000000000000000000000000000000000"
+    },
+
+    "isFeeAccounted": {
+        "FPR": true,
+        "APR": true,
+        "BRIDGE": false,
+        "UTILITY": false,
+        "CUSTOM": true,
+        "ORDERBOOK": true
+    },
+
+    "isEntitledRebate": {
+        "FPR": true,
+        "APR": true,
+        "BRIDGE": false,
+        "UTILITY": false,
+        "CUSTOM": true,
+        "ORDERBOOK": true
+    },
+
+    "reserves": [
+        {
+            "address": "0xf9f914e554d49b40e5ef1fee8918b2934263aca5",
+            "id": "0xaa00004b79626572",
+            "type": "APR",
+            "rebateWallet": "0xbDd33F411DA0B40018922a3BC69001B458227f5c",
+            "tokens": [
+                {
+                    "address":"0xcb78b457c1F79a06091EAe744aA81dc75Ecb1183",
+                    "ethToToken":true,
+                    "tokenToEth":true
+                }
+            ]
+        },
+        {
+            "address": "0x45460bd0f9a68b98bf1f5c478b7584e057e32ef5",
+            "id": "0xff4b79626572465052",
+            "type": "FPR",
+            "rebateWallet": "0xbDd33F411DA0B40018922a3BC69001B458227f5c",
+            "tokens": [
+                {
+                    "address":"0xaaf64bfcc32d0f15873a02163e7e500671a4ffcd",
+                    "ethToToken":true,
+                    "tokenToEth":true
+                },
+                {
+                    "address":"0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea",
+                    "ethToToken":true,
+                    "tokenToEth":true
+                },
+                {
+                    "address":"0xbf7a7169562078c96f0ec1a8afd6ae50f12e5a99",
+                    "ethToToken":true,
+                    "tokenToEth":true
+                },
+                {
+                    "address":"0xc4375b7de8af5a38a93548eb8453a498222c4ff2",
+                    "ethToToken":true,
+                    "tokenToEth":true
+                },
+                {
+                    "address":"0xad67cb4d63c9da94aca37fdf2761aadf780ff4a2",
+                    "ethToToken":true,
+                    "tokenToEth":true
+                },
+                {
+                    "address":"0xdb7ec4e4784118d9733710e46f7c83fe7889596a",
+                    "ethToToken":true,
+                    "tokenToEth":true
+                },
+                {
+                    "address":"0x6fee5727ee4cdcbd91f3a873ef2966df31713a04",
+                    "ethToToken":true,
+                    "tokenToEth":true
+                },
+                {
+                    "address":"0xd0a1e359811322d97991e03f863a0c30c2cf029c",
+                    "ethToToken":true,
+                    "tokenToEth":true
+                },
+                {
+                    "address":"0xab74653cac23301066aba8eba62b9abd8a8c51d6",
+                    "ethToToken":true,
+                    "tokenToEth":true
+                }
+            ]
+        },
+        {
+            "address": "0x17b5f98082abb164216ea6a40fddcd54b4b9f8e5",
+            "id": "0xaa4b79626572444149",
+            "type": "APR",
+            "rebateWallet": "0xbDd33F411DA0B40018922a3BC69001B458227f5c",
+            "tokens": [
+                {
+                    "address":"0x1d7e3a1a65a367db1d1d3f51a54ac01a2c4c92ff",
+                    "ethToToken":true,
+                    "tokenToEth":true
+                }
+            ]
+        },
+        {
+            "address": "0x9f67899aa5c9039cec810f265ec72913857d58d7",
+            "id": "0xaa4b79626572424154",
+            "type": "APR",
+            "rebateWallet": "0xbDd33F411DA0B40018922a3BC69001B458227f5c",
+            "tokens": [
+                {
+                    "address":"0x9f8cfb61d3b2af62864408dd703f9c3beb55dff7",
+                    "ethToToken":true,
+                    "tokenToEth":true
+                }
+            ]
+        },
+        {
+            "address": "0x1fe0c4488fd3f3f70204d5709945bc4b0a99672e",
+            "id": "0xaa4b7962657244414932",
+            "type": "APR",
+            "rebateWallet": "0xbDd33F411DA0B40018922a3BC69001B458227f5c",
+            "tokens": [
+                {
+                    "address":"0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa",
+                    "ethToToken":true,
+                    "tokenToEth":true
+                }
+            ]
+        }
+    ],
+
+    "wallets": [],
+
+    "permission" : {
+        "KyberDao": {
+            "DaoOperator": "0xbDd33F411DA0B40018922a3BC69001B458227f5c"
+        },
+        "FeeHandler": {
+            "DaoOperator": "0xbDd33F411DA0B40018922a3BC69001B458227f5c"
+        },
+        "MatchingEngine" : {
+            "admin" : "0xbDd33F411DA0B40018922a3BC69001B458227f5c",
+            "operators" : ["0xbDd33F411DA0B40018922a3BC69001B458227f5c","0xBE2F0354D970265BFc36D383af77F72736b81B54","0x46a77D03A76232211CD2eabaE3e10e0dfe71CddA","0x6E4843E90ecacd3a3BBcED74A5235363762D5100"],
+            "alerters" : ["0xbDd33F411DA0B40018922a3BC69001B458227f5c","0xBE2F0354D970265BFc36D383af77F72736b81B54","0x46a77D03A76232211CD2eabaE3e10e0dfe71CddA","0x6E4843E90ecacd3a3BBcED74A5235363762D5100"]
+        },
+        "Network" : {
+            "admin" : "0xbDd33F411DA0B40018922a3BC69001B458227f5c",
+            "operators" : ["0xbDd33F411DA0B40018922a3BC69001B458227f5c","0xBE2F0354D970265BFc36D383af77F72736b81B54","0x46a77D03A76232211CD2eabaE3e10e0dfe71CddA","0x6E4843E90ecacd3a3BBcED74A5235363762D5100"],
+            "alerters" : ["0xbDd33F411DA0B40018922a3BC69001B458227f5c","0xBE2F0354D970265BFc36D383af77F72736b81B54","0x46a77D03A76232211CD2eabaE3e10e0dfe71CddA","0x6E4843E90ecacd3a3BBcED74A5235363762D5100"]
+        },
+        "Proxy" : {
+            "admin" : "0xbDd33F411DA0B40018922a3BC69001B458227f5c",
+            "operators" : ["0xbDd33F411DA0B40018922a3BC69001B458227f5c"],
+            "alerters" : []
+        },
+        "Storage" : {
+            "admin" : "0xbDd33F411DA0B40018922a3BC69001B458227f5c",
+            "operators" : [],
+            "alerters" : []
+        }
+    },
+
+    "max gas price" : 100000000000,
+    "neg diff in bps" : 20,
+    
+    "epoch period": 2700,
+    "start timestamp": 160404900,
+    "network fee bps": 10,
+    "reward fee bps": 3000,
+    "rebate bps": 3000,
+    "burn block interval": 10,
+    "contracts filename" : "katalystContracts.json",
+    "output filename" : "katalystKovan.json"
+}
