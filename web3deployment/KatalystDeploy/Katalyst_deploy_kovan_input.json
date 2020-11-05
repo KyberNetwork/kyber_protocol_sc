@@ -79,7 +79,7 @@
     "isFeeAccounted": {
         "FPR": true,
         "APR": true,
-        "BRIDGE": false,
+        "BRIDGE": true,
         "UTILITY": false,
         "CUSTOM": true,
         "ORDERBOOK": true
