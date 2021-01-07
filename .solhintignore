@@ -1,0 +1,63 @@
+# SOLIDITY 4 #
+
+## mock
+contractS/sol4/mock/ERC20Interface.sol
+contractS/sol4/mock/Utils.sol
+contractS/sol4/mock/reserves/ConversionRatesInterface.sol
+contractS/sol4/mock/reserves/KyberReserveInterface.sol
+contractS/sol4/mock/reserves/StrictValidatingReserve.sol
+contractS/sol4/mock/reserves/fprConversionRate/VolumeImbalanceRecorder.sol
+
+## mock
+contractS/sol4/mock/ERC20Interface.sol
+contracts/sol4/mock/StrictValidatingReserve.sol
+contracts/sol4/mock/TestToken.sol
+
+## previousVersions
+contracts/sol4/previousVersions/KyberReserveV1.sol
+
+## reserves
+contracts/sol4/mock/reserves/aprConversionRate/LiquidityConversionRates.sol
+contracts/sol4/mock/reserves/aprConversionRate/LiquidityFormula.sol
+contracts/sol4/mock/reserves/fprConversionRate/ConversionRates.sol
+contracts/sol4/mock/reserves/KyberReserve.sol
+contracts/sol4/reserves/mock/fprConversionRate/VolumeImbalanceRecorder.sol
+
+## SOLIDITY 6 ##
+
+## main
+contracts/sol6/KyberNetwork.sol
+contracts/sol6/IKyberFeeHandler.sol
+contracts/sol6/KyberMatchingEngine.sol
+contracts/sol6/KyberStorage.sol
+contracts/sol6/KyberNetworkProxy.sol
+
+## mock
+contracts/sol6/mock/dao/IKyberStaking.sol
+contracts/sol6/mock/dao/KyberDao.sol
+contracts/sol6/mock/dao/KyberFeeHandler.sol
+contracts/sol6/mock/dao/KyberStaking.sol
+contracts/sol6/mock/dao/MockKyberDao.sol
+
+contracts/sol6/mock/networks/GenerousKyberNetwork.sol
+contracts/sol6/mock/networks/GenerousKyberNetwork2.sol
+contracts/sol6/mock/networks/KyberNetworkNoMaxDest.sol
+contracts/sol6/mock/networks/MaliciousKyberNetwork.sol
+contracts/sol6/mock/MaliciousMatchingEngine.sol
+contracts/sol6/mock/MaliciousReserve2.sol
+contracts/sol6/mock/MaliciousStorage.sol
+contracts/sol6/mock/MockHintHandler.sol
+contracts/sol6/mock/MockKyberDao.sol
+contracts/sol6/mock/reserves/ReentrantReserve.sol
+contracts/sol6/mock/SimpleKyberProxy.sol
+contracts/sol6/mock/TestTokenNotReturn.sol
+contracts/sol6/mock/Token.sol
+
+## utils
+contracts/sol6/utils/Utils5.sol
+contracts/sol6/utils/zeppelin/Address.sol
+contracts/sol6/utils/zeppelin/SafeERC20.sol
+contracts/sol6/utils/zeppelin/SafeMath.sol
+
+## wrappers
+contracts/sol6/wrappers/KyberRateHelper.sol

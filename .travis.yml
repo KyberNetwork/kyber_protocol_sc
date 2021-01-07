@@ -1,0 +1,55 @@
+language: node_js
+node_js:
+  - 10
+
+before_install:
+  - npm i -g npm
+  - npm i -g mocha-only-detector
+  - find test/ -name "*.js" -print0 | xargs -0 mocha-only-detector
+
+env:
+  global:
+    - COVERAGE_BRANCH=Katalyst
+
+jobs:
+  include:
+    - env:
+        - TEST_PART: regression
+    - env:
+        - TEST_PART: Coverage
+
+install:
+  - yarn install
+
+before_script:
+  - yarn lint
+
+script:
+  - ./cmp.sh
+  - .travis/test-part.sh
+  - .travis/report.sh
+
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: katalyst-coverage.knstats.com
+    region: ap-southeast-1
+    acl: public_read
+    local_dir: report
+    upload_dir: report
+    skip_cleanup: true
+    on:
+      all_branches: true
+      condition: $TEST_PART = Sol6
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: katalyst-coverage.knstats.com
+    region: ap-southeast-1
+    acl: public_read
+    local_dir: coverage
+    skip_cleanup: true
+    on:
+      branch: $COVERAGE_BRANCH
+      condition: $TEST_PART = Coverage
