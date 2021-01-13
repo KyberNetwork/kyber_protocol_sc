@@ -1581,7 +1581,7 @@ contract('KyberHintHandler', function(accounts) {
             });
 
             it('should revert the T2E hint for RANDOM HEX HINT TYPE', async() => {
-                t2eOpcode = web3.utils.randomHex(32);
+                t2eOpcode = "0xab";
                 t2eSplits = [];
 
                 hint = Helper.buildHint()(t2eOpcode, t2eReserves, t2eSplits);
@@ -1776,7 +1776,7 @@ contract('KyberHintHandler', function(accounts) {
             });
 
             it('should revert the E2T hint for RANDOM HEX HINT TYPE', async() => {
-                e2tOpcode = web3.utils.randomHex(32);
+                e2tOpcode = "0xab";
                 e2tSplits = [];
 
                 hint = Helper.buildHint()(e2tOpcode, e2tReserves, e2tSplits);
@@ -2492,7 +2492,7 @@ contract('KyberHintHandler', function(accounts) {
                 it(`should revert for T2T hint for T2E ${t2eTradeType}, RANDOM HEX HINT TYPE`, async() => {
                     t2eOpcode = TRADE_TYPES[t2eTradeType];
                     t2eSplits = (t2eTradeType == 'SPLIT') ? BPS_SPLIT : [];
-                    e2tOpcode = web3.utils.randomHex(32);
+                    e2tOpcode = "0xab";
                     e2tSplits = [];
             
                     hint = Helper.buildHintT2T(
@@ -2565,7 +2565,7 @@ contract('KyberHintHandler', function(accounts) {
 
             Object.keys(TRADE_TYPES).forEach(e2tTradeType => {
                 it(`should revert for T2T hint for RANDOM HEX HINT TYPE, E2T ${e2tTradeType}`, async() => {
-                    t2eOpcode = web3.utils.randomHex(32);
+                    t2eOpcode = "0xab";
                     t2eSplits = [];
                     e2tOpcode = TRADE_TYPES[e2tTradeType];
                     e2tSplits = (e2tTradeType == 'SPLIT') ? BPS_SPLIT : [];
