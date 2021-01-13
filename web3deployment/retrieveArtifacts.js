@@ -3,8 +3,8 @@ const util = require('util');
 const readdir = util.promisify(fs.readdir);
 const path = require("path");
 const artifactsPath = path.join(__dirname, "../artifacts/");
-const buidlerConfigSol5 = path.join(__dirname, "../buidlerConfigSol5.js");
-const buidlerConfigSol4 = path.join(__dirname, "../buidlerConfigSol4.js");
+const hardhatConfigSol5 = path.join(__dirname, "../hardhatConfigSol5.js");
+const hardhatConfigSol4 = path.join(__dirname, "../hardhatConfigSol4.js");
 const execSync = require('child_process').execSync;
 
 module.exports.retrieveArtifacts = main;
@@ -29,9 +29,9 @@ async function packageArtifacts() {
 
 function compileContracts() {
   console.log("Compiling contracts...");
-  execSync(`npx buidler compile`, { encoding: 'utf-8' });
-  execSync(`npx buidler compile --config ${buidlerConfigSol5}`, { encoding: 'utf-8'});
-  execSync(`npx buidler compile --config ${buidlerConfigSol4}`, { encoding: 'utf-8'});
+  execSync(`yarn hardhat compile`, { encoding: 'utf-8' });
+  execSync(`yarn hardhat compile --config ${hardhatConfigSol5}`, { encoding: 'utf-8'});
+  execSync(`yarn hardhat compile --config ${hardhatConfigSol4}`, { encoding: 'utf-8'});
 }
 
 main();

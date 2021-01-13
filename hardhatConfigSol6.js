@@ -1,10 +1,11 @@
 module.exports = {
-  solc: {
-    version: "0.4.18",
+  solidity: {
+    version: "0.6.6",
     optimizer: require("./solcOptimiserSettings.js")
   },
 
   paths: {
-    sources: "./contracts/sol4"
+    sources: "./contracts/sol6",
+    tests: "./test/sol6",
   }
 };

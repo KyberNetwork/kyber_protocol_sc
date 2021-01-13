@@ -7,7 +7,7 @@ readonly test_part=${TEST_PART:-}
 
 case "$test_part" in
 regression)
-    npx buidler test --no-compile
+    yarn hardhat test --no-compile
     ;;
 Coverage)
     if [[ $TRAVIS_EVENT_TYPE != "push" ]]; then

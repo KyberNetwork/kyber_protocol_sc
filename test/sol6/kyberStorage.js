@@ -1145,7 +1145,11 @@ contract('KyberStorage', function(accounts) {
                 Helper.assertEqualArray(await kyberStorage.getReservesPerType(resType), [mockReserveId.toLowerCase()], "reserves per type not equal");
             }
 
-            let allReserves = await kyberStorage.getReserves();
+            let allReserves = [];
+            let reserves = await kyberStorage.getReserves();
+            for(let i = 0; i < reserves.length; i++) {
+                allReserves.push(reserves[i]);
+            }
             Helper.assertEqualArray(allReserves, mockReserves, "all reserves not equal");
 
             // remove each reserve
