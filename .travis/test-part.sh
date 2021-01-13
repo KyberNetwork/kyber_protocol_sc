@@ -6,7 +6,7 @@ set -euxo pipefail
 readonly test_part=${TEST_PART:-}
 
 case "$test_part" in
-regression)
+Regression)
     yarn hardhat test --no-compile
     ;;
 Coverage)
