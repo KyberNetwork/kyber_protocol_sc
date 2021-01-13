@@ -327,11 +327,11 @@ async function setupFprPricing (tokens, numImbalanceSteps, numQtySteps, tokensPe
         await pricing.setImbalanceStepFunction(tokenAddress, buyX, buyY, sellX, sellY, {from:operator});
     }
 
-    compactBuyArr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    compactBuyArr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     let compactBuyHex = Helper.bytesToHex(compactBuyArr);
     buys.push(compactBuyHex);
 
-    compactSellArr =  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    compactSellArr =  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     let compactSellHex = Helper.bytesToHex(compactSellArr);
     sells.push(compactSellHex);
 

@@ -1,16 +1,17 @@
-usePlugin("@nomiclabs/buidler-truffle5");
-usePlugin("@nomiclabs/buidler-web3");
+require("@nomiclabs/hardhat-truffle5");
+require("@nomiclabs/hardhat-web3");
+require('solidity-coverage');
 
 module.exports = {
-  defaultNetwork: "buidlerevm",
+  defaultNetwork: "hardhat",
 
   networks: {
     develop: {
       url: "http://127.0.0.1:8545",
       gas: 6000000,
-      timeout: 20000
+      timeout: 200000
     },
-    buidlerevm: {
+    hardhat: {
       accounts: [
         // 20 accounts with 10^14 ETH each 
         // Addresses:
@@ -138,17 +139,26 @@ module.exports = {
     }
   },
 
-  solc: {
-    version: "0.6.6",
-    optimizer: require("./solcOptimiserSettings.js")
+  solidity: {
+    compilers: [{
+      version: "0.4.18",
+      settings: {
+        optimizer: require("./solcOptimiserSettings.js")
+      }
+    }, {
+      version: "0.6.6",
+      settings: {
+        optimizer: require("./solcOptimiserSettings.js")
+      }
+    }]
   },
 
   paths: {
-    sources: "./contracts/sol6",
-    tests: "./test/sol6",
+    sources: "./contracts",
+    tests: "./test",
   },
 
   mocha: {
-    enableTimeouts: false
+    timeout: 0
   }
 };

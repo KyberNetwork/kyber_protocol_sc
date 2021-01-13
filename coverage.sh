@@ -7,12 +7,12 @@ done
 
 export NODE_OPTIONS=--max-old-space-size=4096
 
-npx buidler clean
-npx buidler compile --config ./buidlerCoverageSol4.js
+yarn hardhat clean
+yarn hardhat compile
 
 if [ -n "$FILE" ]
 then
-    npx buidler coverage --config ./buidlerConfigSol6.js --testfiles $FILE --solcoverjs ".solcover.js" --temp ""
+  yarn hardhat coverage --testfiles $FILE --solcoverjs ".solcover.js"
 else
-    npx buidler coverage --config ./buidlerConfigSol6.js --testfiles "" --solcoverjs ".solcover.js" --temp ""
+  yarn hardhat coverage --solcoverjs ".solcover.js"
 fi

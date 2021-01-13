@@ -4,22 +4,41 @@ const util = require('util');
 const got = require('got');
 const yargs = require('yargs');
 
-let path = 'artifacts';
-
-const readdir = util.promisify(fs.readdir);
+let path = 'artifacts/contracts';
 
 let argv = yargs.default('branch', 'Katalyst').alias('b', 'branch').argv;
 
+const readdir = util.promisify(fs.readdir);
+
+async function getFiles(dir, files_, names_){
+  var files = await readdir(dir);
+  for (var i in files){
+      var fullDir = dir + '/' + files[i];
+      if (fs.statSync(fullDir).isDirectory()){
+          await getFiles(fullDir, files_, names_);
+      } else {
+          files_.push(fullDir);
+          names_.push(files[i]);
+      }
+  }
+  return (files_, names_);
+}
+
 async function generateCodeSizeReport() {
   let result = {};
-  let fileNames = await readdir(path);
-  for (let i = 0; i < fileNames.length; i++) {
-    let fileName = fileNames[i];
-    let rawData = fs.readFileSync(path + '/' + fileName);
+  let fileDirs = [];
+  let fileNames = [];
+  await getFiles(path, fileDirs, fileNames);
+
+  for (let i = 0; i < fileDirs.length; i++) {
+    let fileDir = fileDirs[i];
+    let rawData = fs.readFileSync(fileDir);
     let contractData = JSON.parse(rawData);
-    let codeSize = contractData.deployedBytecode.length / 2 - 1;
-    if (codeSize > 0) {
-      result[fileName] = codeSize;
+    if (contractData.deployedBytecode != undefined) {
+      let codeSize = contractData.deployedBytecode.length / 2 - 1;
+      if (codeSize > 0) {
+        result[fileNames[i]] = codeSize;
+      }
     }
   }
   return result;
