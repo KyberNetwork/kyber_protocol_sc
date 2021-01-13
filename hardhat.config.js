@@ -145,11 +145,6 @@ module.exports = {
         optimizer: require("./solcOptimiserSettings.js")
       }
     }, {
-      version: "0.5.11",
-      settings: {
-        optimizer: require("./solcOptimiserSettings.js")
-      }
-    }, {
       version: "0.6.6",
       settings: {
         optimizer: require("./solcOptimiserSettings.js")
