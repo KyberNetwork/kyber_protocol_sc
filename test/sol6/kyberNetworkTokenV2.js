@@ -194,6 +194,192 @@ contract('KyberNetworkTokenV2', function(accounts) {
     });
 
     describe(`Test other ERC20 functions`, async() => {
+        beforeEach(`init before each test`, async() => {
+            newKNC = await KyberNetworkTokenV2.new(oldKNC.address, minter, { from: owner });
+        });
+
+        describe(`Test transfer`, async() => {
+            it(`Test reverts not enough fund`, async() => {
+                let userBalance = await newKNC.balanceOf(user);
+                await expectRevert(
+                    newKNC.transfer(owner, userBalance.add(new BN(1)), { from: user }),
+                    "ERC20: transfer amount exceeds balance"
+                );
+            });
+
+            it(`Test reverts invalid recipient`, async() => {
+                let amount = new BN(10).pow(new BN(18));
+                await newKNC.mint(user, amount, { from: minter });
+                await expectRevert(
+                    newKNC.transfer(zeroAddress, amount, { from: user }),
+                    "ERC20: transfer to the zero address"
+                );
+            });
+
+            it(`Test data changes`, async() => {
+                let amount = new BN(10).pow(new BN(18));
+                await newKNC.mint(user, amount, { from: minter });
+                let userBalance = await newKNC.balanceOf(user);
+                let recipientBalance = await newKNC.balanceOf(owner);
+                await newKNC.transfer(owner, amount, { from: user });
+                Helper.assertEqual(
+                    userBalance.sub(amount), await newKNC.balanceOf(user),
+                );
+                Helper.assertEqual(
+                    recipientBalance.add(amount), await newKNC.balanceOf(owner),
+                );
+            });
+        });
+
+        describe(`Test transferFrom`, async() => {
+            it(`Test reverts invalid from/to`, async() => {
+                let amount = new BN(10).pow(new BN(18));
+                await newKNC.mint(user, amount, { from: minter });
+                await expectRevert(
+                    newKNC.transferFrom(zeroAddress, owner, amount, { from: user }),
+                    "ERC20: transfer from the zero address"
+                );
+                await expectRevert(
+                    newKNC.transferFrom(user, zeroAddress, amount, { from: user }),
+                    "ERC20: transfer to the zero address"
+                );
+            });
+
+            it(`Test reverts not enough balance or allowance`, async() => {
+                let amount = new BN(10).pow(new BN(18));
+                await newKNC.mint(user, amount, { from: minter });
+                let userBalance = await newKNC.balanceOf(user);
+                await expectRevert(
+                    newKNC.transferFrom(user, owner, userBalance.add(new BN(1)), { from: user }),
+                    "ERC20: transfer amount exceeds balance"
+                );
+                await newKNC.approve(user, userBalance.sub(new BN(1)), { from: user });
+                await expectRevert(
+                    newKNC.transferFrom(user, owner, userBalance, { from: user }),
+                    "ERC20: transfer amount exceeds allowance"
+                );
+            });
+
+            it(`Test data changes`, async() => {
+                let amount = new BN(10).pow(new BN(18));
+                await newKNC.mint(user, amount, { from: minter });
+                await newKNC.approve(minter, amount.mul(new BN(2)), { from: user });
+                let userBalance = await newKNC.balanceOf(user);
+                let recipientBalance = await newKNC.balanceOf(owner);
+                let allowance = await newKNC.allowance(user, minter);
+                await newKNC.transferFrom(user, owner, amount, { from: minter });
+                Helper.assertEqual(
+                    userBalance.sub(amount), await newKNC.balanceOf(user),
+                );
+                Helper.assertEqual(
+                    recipientBalance.add(amount), await newKNC.balanceOf(owner),
+                );
+                Helper.assertEqual(
+                    allowance.sub(amount), await newKNC.allowance(user, minter),
+                );
+            });
+        });
+
+        describe(`Test approve`, async() => {
+            it(`Test reverts invalid spender`, async() => {
+                let amount = new BN(10).pow(new BN(18));
+                await expectRevert(
+                    newKNC.approve(zeroAddress, amount, { from: user }),
+                    "ERC20: approve to the zero address"
+                );
+            });
+
+            it(`Test data changes`, async() => {
+                let amount = new BN(10).pow(new BN(18));
+                await newKNC.approve(minter, amount.mul(new BN(2)), { from: user });
+                Helper.assertEqual(
+                    amount.mul(new BN(2)), await newKNC.allowance(user, minter),
+                );
+                await newKNC.approve(minter, amount, { from: user });
+                Helper.assertEqual(
+                    amount, await newKNC.allowance(user, minter),
+                );
+            });
+        });
+
+        describe(`Test approve`, async() => {
+            it(`Test reverts invalid spender`, async() => {
+                let amount = new BN(10).pow(new BN(18));
+                await expectRevert(
+                    newKNC.approve(zeroAddress, amount, { from: user }),
+                    "ERC20: approve to the zero address"
+                );
+            });
+
+            it(`Test data changes`, async() => {
+                let amount = new BN(10).pow(new BN(18));
+                await newKNC.approve(minter, amount.mul(new BN(2)), { from: user });
+                Helper.assertEqual(
+                    amount.mul(new BN(2)), await newKNC.allowance(user, minter),
+                );
+                await newKNC.approve(minter, amount, { from: user });
+                Helper.assertEqual(
+                    amount, await newKNC.allowance(user, minter),
+                );
+            });
+        });
+
+        describe(`Test burn`, async() => {
+            it(`Test reverts amount exceeds balance`, async() => {
+                let amount = new BN(10).pow(new BN(18));
+                await newKNC.mint(user, amount, { from: minter });
+                let userBalance = await newKNC.balanceOf(user);
+                await expectRevert(
+                    newKNC.burn(userBalance.add(new BN(1)), { from: user }),
+                    "ERC20: burn amount exceeds balance"
+                );
+            });
+
+            it(`Test data changes`, async() => {
+                let amount = new BN(10).pow(new BN(18));
+                await newKNC.approve(minter, amount.mul(new BN(2)), { from: user });
+                Helper.assertEqual(
+                    amount.mul(new BN(2)), await newKNC.allowance(user, minter),
+                );
+                await newKNC.approve(minter, amount, { from: user });
+                Helper.assertEqual(
+                    amount, await newKNC.allowance(user, minter),
+                );
+            });
+        });
+
+        describe(`Test burnFrom`, async() => {
+            it(`Test reverts amount exceeds balance/allowance`, async() => {
+                let amount = new BN(10).pow(new BN(18));
+                await newKNC.mint(user, amount, { from: minter });
+                await newKNC.approve(minter, new BN(0), { from: user });
+                let userBalance = await newKNC.balanceOf(user);
+                await expectRevert(
+                    newKNC.burnFrom(user, userBalance, { from: minter }),
+                    "ERC20: burn amount exceeds allowance"
+                );
+                await newKNC.approve(minter, userBalance.mul(new BN(2)), { from: user });
+                await expectRevert(
+                    newKNC.burnFrom(user, userBalance.add(new BN(1)), { from: minter }),
+                    "ERC20: burn amount exceeds balance"
+                );
+            });
+
+            it(`Test data changes`, async() => {
+                let amount = new BN(10).pow(new BN(18));
+                await newKNC.mint(user, amount, { from: minter });
+                let userBalance = await newKNC.balanceOf(user);
+                await newKNC.approve(minter, amount.mul(new BN(2)), { from: user });
+                let allowance = await newKNC.allowance(user, minter);
+                await newKNC.burnFrom(user, amount, { from: minter });
+                Helper.assertEqual(
+                    userBalance.sub(amount), await newKNC.balanceOf(user),
+                );
+                Helper.assertEqual(
+                    allowance.sub(amount), await newKNC.allowance(user, minter),
+                );
+            });
+        });
     });
 
     describe(`Test changeMinter`, async() => {
