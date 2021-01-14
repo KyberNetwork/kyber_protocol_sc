@@ -41,7 +41,7 @@ contract KyberNetworkTokenV2 is ERC20Burnable, Ownable {
 
     /// @dev burn old knc and mint new knc for msg.sender, ratio 1:1
     function mintWithOldKnc(uint256 amount) external {
-        assert(IERC20Burnable(oldKNC).burnFrom(msg.sender, amount));
+        IERC20Burnable(oldKNC).burnFrom(msg.sender, amount);
 
         super._mint(msg.sender, amount);
         emit BurntAndMinted(msg.sender, amount);

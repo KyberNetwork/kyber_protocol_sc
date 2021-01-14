@@ -25,7 +25,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
     });
 
     describe(`Test constructor`, async() => {
-        it(`Invalid old knc or minter address`, async() => {
+        it(`test invalid old knc or minter address`, async() => {
             await expectRevert(
                 KyberNetworkTokenV2.new(zeroAddress, minter),
                 "invalid old knc"
@@ -36,7 +36,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
             );
         });
 
-        it(`Correct setup data after deployed`, async() => {
+        it(`test correct setup data after deployed`, async() => {
             let contract = await KyberNetworkTokenV2.new(oldKNC.address, minter, { from: owner });
             Helper.assertEqual(0, await contract.totalSupply());
             Helper.assertEqual(oldKNC.address, await contract.oldKNC());
@@ -50,7 +50,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
             newKNC = await KyberNetworkTokenV2.new(oldKNC.address, minter, { from: owner });
         });
 
-        it(`Test mint reverts not minter`, async() => {
+        it(`test mint reverts not minter`, async() => {
             await expectRevert(
                 newKNC.mint(user, new BN(10).pow(new BN(18)), { from: user }),
                 "only minter"
@@ -61,14 +61,14 @@ contract('KyberNetworkTokenV2', function(accounts) {
             );
         });
 
-        it(`Test mint reverts recipient is zero address`, async() => {
+        it(`test mint reverts recipient is zero address`, async() => {
             await expectRevert(
                 newKNC.mint(zeroAddress, new BN(10).pow(new BN(18)), { from: minter }),
                 "ERC20: mint to the zero address"
             );
         });
 
-        it(`Test mint reverts amount is too high`, async() => {
+        it(`test mint reverts amount is too high`, async() => {
             let maxUInt = (new BN(2).pow(new BN(256))).sub(new BN(1));
             await newKNC.mint(user, maxUInt, { from: minter });
             await expectRevert(
@@ -81,7 +81,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
             );
         });
 
-        it(`Test mint correct data record`, async() => {
+        it(`test mint correct data record`, async() => {
             let userBalance = await newKNC.balanceOf(user);
             let totalSupply = await newKNC.totalSupply();
             let amount = new BN(10).pow(new BN(20));
@@ -96,7 +96,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
             )
         });
 
-        it(`Test mint events`, async() => {
+        it(`test mint events`, async() => {
             let amount = new BN(10).pow(new BN(20));
             let tx = await newKNC.mint(user, amount, { from: minter });
             expectEvent(tx, "Minted", {
@@ -111,7 +111,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
             });
         });
 
-        it(`Test mint after change minter`, async() => {
+        it(`test mint after change minter`, async() => {
             let amount = new BN(10).pow(new BN(20));
             await newKNC.mint(user, amount, { from: minter });
             let userBalance = await newKNC.balanceOf(user);
@@ -134,7 +134,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
             newKNC = await KyberNetworkTokenV2.new(oldKNC.address, minter, { from: owner });
         });
 
-        it(`Test revert not enough balance`, async() => {
+        it(`test revert not enough balance`, async() => {
             let userOldKncBalance = await oldKNC.balanceOf(user);
             // approve enough allowance
             await oldKNC.approve(newKNC.address, userOldKncBalance.mul(new BN(2)), { from: user });
@@ -143,7 +143,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
             );
         });
 
-        it(`Test revert not enough allowance`, async() => {
+        it(`test revert not enough allowance`, async() => {
             let userAllowance = await oldKNC.allowance(user, newKNC.address);
             if (userAllowance.eq(new BN(0))) {
                 userAllowance = new BN(10).pow(new BN(20));
@@ -156,7 +156,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
             );
         });
 
-        it(`Test data changes and events`, async() => {
+        it(`test data changes and events`, async() => {
             let amount = new BN(10).pow(new BN(20));
             await oldKNC.approve(newKNC.address, amount.mul(new BN(2)), { from: user });
             await oldKNC.transfer(user, amount.mul(new BN(2)));
@@ -199,7 +199,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
         });
 
         describe(`Test transfer`, async() => {
-            it(`Test reverts not enough fund`, async() => {
+            it(`test reverts not enough fund`, async() => {
                 let userBalance = await newKNC.balanceOf(user);
                 await expectRevert(
                     newKNC.transfer(owner, userBalance.add(new BN(1)), { from: user }),
@@ -207,7 +207,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
                 );
             });
 
-            it(`Test reverts invalid recipient`, async() => {
+            it(`test reverts invalid recipient`, async() => {
                 let amount = new BN(10).pow(new BN(18));
                 await newKNC.mint(user, amount, { from: minter });
                 await expectRevert(
@@ -216,7 +216,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
                 );
             });
 
-            it(`Test data changes`, async() => {
+            it(`test data changes`, async() => {
                 let amount = new BN(10).pow(new BN(18));
                 await newKNC.mint(user, amount, { from: minter });
                 let userBalance = await newKNC.balanceOf(user);
@@ -232,7 +232,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
         });
 
         describe(`Test transferFrom`, async() => {
-            it(`Test reverts invalid from/to`, async() => {
+            it(`test reverts invalid from/to`, async() => {
                 let amount = new BN(10).pow(new BN(18));
                 await newKNC.mint(user, amount, { from: minter });
                 await expectRevert(
@@ -245,7 +245,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
                 );
             });
 
-            it(`Test reverts not enough balance or allowance`, async() => {
+            it(`test reverts not enough balance or allowance`, async() => {
                 let amount = new BN(10).pow(new BN(18));
                 await newKNC.mint(user, amount, { from: minter });
                 let userBalance = await newKNC.balanceOf(user);
@@ -260,7 +260,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
                 );
             });
 
-            it(`Test data changes`, async() => {
+            it(`test data changes`, async() => {
                 let amount = new BN(10).pow(new BN(18));
                 await newKNC.mint(user, amount, { from: minter });
                 await newKNC.approve(minter, amount.mul(new BN(2)), { from: user });
@@ -281,7 +281,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
         });
 
         describe(`Test approve`, async() => {
-            it(`Test reverts invalid spender`, async() => {
+            it(`test reverts invalid spender`, async() => {
                 let amount = new BN(10).pow(new BN(18));
                 await expectRevert(
                     newKNC.approve(zeroAddress, amount, { from: user }),
@@ -289,7 +289,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
                 );
             });
 
-            it(`Test data changes`, async() => {
+            it(`test data changes`, async() => {
                 let amount = new BN(10).pow(new BN(18));
                 await newKNC.approve(minter, amount.mul(new BN(2)), { from: user });
                 Helper.assertEqual(
@@ -303,7 +303,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
         });
 
         describe(`Test approve`, async() => {
-            it(`Test reverts invalid spender`, async() => {
+            it(`test reverts invalid spender`, async() => {
                 let amount = new BN(10).pow(new BN(18));
                 await expectRevert(
                     newKNC.approve(zeroAddress, amount, { from: user }),
@@ -311,7 +311,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
                 );
             });
 
-            it(`Test data changes`, async() => {
+            it(`test data changes`, async() => {
                 let amount = new BN(10).pow(new BN(18));
                 await newKNC.approve(minter, amount.mul(new BN(2)), { from: user });
                 Helper.assertEqual(
@@ -325,7 +325,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
         });
 
         describe(`Test burn`, async() => {
-            it(`Test reverts amount exceeds balance`, async() => {
+            it(`test reverts amount exceeds balance`, async() => {
                 let amount = new BN(10).pow(new BN(18));
                 await newKNC.mint(user, amount, { from: minter });
                 let userBalance = await newKNC.balanceOf(user);
@@ -335,7 +335,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
                 );
             });
 
-            it(`Test data changes`, async() => {
+            it(`test data changes`, async() => {
                 let amount = new BN(10).pow(new BN(18));
                 await newKNC.approve(minter, amount.mul(new BN(2)), { from: user });
                 Helper.assertEqual(
@@ -349,7 +349,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
         });
 
         describe(`Test burnFrom`, async() => {
-            it(`Test reverts amount exceeds balance/allowance`, async() => {
+            it(`test reverts amount exceeds balance/allowance`, async() => {
                 let amount = new BN(10).pow(new BN(18));
                 await newKNC.mint(user, amount, { from: minter });
                 await newKNC.approve(minter, new BN(0), { from: user });
@@ -365,7 +365,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
                 );
             });
 
-            it(`Test data changes`, async() => {
+            it(`test data changes`, async() => {
                 let amount = new BN(10).pow(new BN(18));
                 await newKNC.mint(user, amount, { from: minter });
                 let userBalance = await newKNC.balanceOf(user);
@@ -387,21 +387,21 @@ contract('KyberNetworkTokenV2', function(accounts) {
             newKNC = await KyberNetworkTokenV2.new(oldKNC.address, minter, { from: owner });
         });
 
-        it(`Test reverts not minter`, async() => {
+        it(`test reverts not minter`, async() => {
             await expectRevert(
                 newKNC.changeMinter(user, { from: user }),
                 "only minter"
             );
         });
 
-        it(`Test reverts new minter is zero address`, async() => {
+        it(`test reverts new minter is zero address`, async() => {
             await expectRevert(
                 newKNC.changeMinter(zeroAddress, { from: minter }),
                 "invalid minter"
             );
         });
 
-        it(`Test data changes and events`, async() => {
+        it(`test data changes and events`, async() => {
             let tx = await newKNC.changeMinter(user, { from: minter });
             Helper.assertEqual(user, await newKNC.minter());
             expectEvent(tx, "MinterChanged", {
@@ -418,7 +418,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
             token = await Token.new("Test", "TST", 18);
         });
 
-        it(`Test reverts not owner`, async() => {
+        it(`test reverts not owner`, async() => {
             let amount = new BN(10).pow(new BN(18));
             await token.transfer(newKNC.address, amount);
             await expectRevert(
@@ -427,7 +427,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
             );
         });
 
-        it(`Test reverts not enough token`, async() => {
+        it(`test reverts not enough token`, async() => {
             let amount = new BN(10).pow(new BN(18));
             await token.transfer(newKNC.address, amount);
             await expectRevert.unspecified(
@@ -435,7 +435,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
             );
         });
 
-        it(`Test data changes`, async() => {
+        it(`test data changes`, async() => {
             let amount = new BN(10).pow(new BN(18));
             await token.transfer(newKNC.address, amount);
             let ownerBalance = await token.balanceOf(owner);
