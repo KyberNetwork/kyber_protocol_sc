@@ -81,7 +81,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
             );
         });
 
-        it(`test mint correct data record`, async() => {
+        it(`test balance, total supply change correctly`, async() => {
             let userBalance = await newKNC.balanceOf(user);
             let totalSupply = await newKNC.totalSupply();
             let amount = new BN(10).pow(new BN(20));
@@ -111,7 +111,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
             });
         });
 
-        it(`test mint after change minter`, async() => {
+        it(`test mint after change minter, balance + total supply change correctly`, async() => {
             let amount = new BN(10).pow(new BN(20));
             await newKNC.mint(user, amount, { from: minter });
             let userBalance = await newKNC.balanceOf(user);
@@ -156,7 +156,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
             );
         });
 
-        it(`test data changes and events`, async() => {
+        it(`test old/new balances + total supplies change correctly and events`, async() => {
             let amount = new BN(10).pow(new BN(20));
             await oldKNC.approve(newKNC.address, amount.mul(new BN(2)), { from: user });
             await oldKNC.transfer(user, amount.mul(new BN(2)));
@@ -181,7 +181,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
                 newKncSupply.add(amount),
                 await newKNC.totalSupply()
             );
-            expectEvent(tx, "BurntAndMinted", {
+            expectEvent(tx, "Migrated", {
                 account: user,
                 amount: amount
             });
@@ -216,11 +216,12 @@ contract('KyberNetworkTokenV2', function(accounts) {
                 );
             });
 
-            it(`test data changes`, async() => {
+            it(`test sender/receiver balances change correctly`, async() => {
                 let amount = new BN(10).pow(new BN(18));
                 await newKNC.mint(user, amount, { from: minter });
                 let userBalance = await newKNC.balanceOf(user);
                 let recipientBalance = await newKNC.balanceOf(owner);
+                let totalSupply = await newKNC.totalSupply();
                 await newKNC.transfer(owner, amount, { from: user });
                 Helper.assertEqual(
                     userBalance.sub(amount), await newKNC.balanceOf(user),
@@ -228,6 +229,9 @@ contract('KyberNetworkTokenV2', function(accounts) {
                 Helper.assertEqual(
                     recipientBalance.add(amount), await newKNC.balanceOf(owner),
                 );
+                Helper.assertEqual(
+                    totalSupply, await newKNC.totalSupply(),
+                )
             });
         });
 
@@ -260,13 +264,14 @@ contract('KyberNetworkTokenV2', function(accounts) {
                 );
             });
 
-            it(`test data changes`, async() => {
+            it(`test balance + allowance change correctly`, async() => {
                 let amount = new BN(10).pow(new BN(18));
                 await newKNC.mint(user, amount, { from: minter });
                 await newKNC.approve(minter, amount.mul(new BN(2)), { from: user });
                 let userBalance = await newKNC.balanceOf(user);
                 let recipientBalance = await newKNC.balanceOf(owner);
                 let allowance = await newKNC.allowance(user, minter);
+                let totalSupply = await newKNC.totalSupply();
                 await newKNC.transferFrom(user, owner, amount, { from: minter });
                 Helper.assertEqual(
                     userBalance.sub(amount), await newKNC.balanceOf(user),
@@ -277,6 +282,9 @@ contract('KyberNetworkTokenV2', function(accounts) {
                 Helper.assertEqual(
                     allowance.sub(amount), await newKNC.allowance(user, minter),
                 );
+                Helper.assertEqual(
+                    totalSupply, await newKNC.totalSupply(),
+                )
             });
         });
 
@@ -289,29 +297,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
                 );
             });
 
-            it(`test data changes`, async() => {
-                let amount = new BN(10).pow(new BN(18));
-                await newKNC.approve(minter, amount.mul(new BN(2)), { from: user });
-                Helper.assertEqual(
-                    amount.mul(new BN(2)), await newKNC.allowance(user, minter),
-                );
-                await newKNC.approve(minter, amount, { from: user });
-                Helper.assertEqual(
-                    amount, await newKNC.allowance(user, minter),
-                );
-            });
-        });
-
-        describe(`Test approve`, async() => {
-            it(`test reverts invalid spender`, async() => {
-                let amount = new BN(10).pow(new BN(18));
-                await expectRevert(
-                    newKNC.approve(zeroAddress, amount, { from: user }),
-                    "ERC20: approve to the zero address"
-                );
-            });
-
-            it(`test data changes`, async() => {
+            it(`test allowance changes correctly`, async() => {
                 let amount = new BN(10).pow(new BN(18));
                 await newKNC.approve(minter, amount.mul(new BN(2)), { from: user });
                 Helper.assertEqual(
@@ -335,15 +321,25 @@ contract('KyberNetworkTokenV2', function(accounts) {
                 );
             });
 
-            it(`test data changes`, async() => {
+            it(`test balance + total supply change correctly`, async() => {
                 let amount = new BN(10).pow(new BN(18));
-                await newKNC.approve(minter, amount.mul(new BN(2)), { from: user });
+                await newKNC.mint(user, amount.mul(new BN(3)), { from: minter });
+                let userBalance = await newKNC.balanceOf(user);
+                let totalSupply = await newKNC.totalSupply();
+                await newKNC.burn(amount, { from: user });
                 Helper.assertEqual(
-                    amount.mul(new BN(2)), await newKNC.allowance(user, minter),
+                    userBalance.isub(amount), await newKNC.balanceOf(user),
                 );
-                await newKNC.approve(minter, amount, { from: user });
                 Helper.assertEqual(
-                    amount, await newKNC.allowance(user, minter),
+                    totalSupply.isub(amount), await newKNC.totalSupply(),
+                );
+                amount.iadd(new BN(1));
+                await newKNC.burn(amount, { from: user });
+                Helper.assertEqual(
+                    userBalance.isub(amount), await newKNC.balanceOf(user),
+                );
+                Helper.assertEqual(
+                    totalSupply.isub(amount), await newKNC.totalSupply(),
                 );
             });
         });
@@ -365,18 +361,22 @@ contract('KyberNetworkTokenV2', function(accounts) {
                 );
             });
 
-            it(`test data changes`, async() => {
+            it(`test balance, allowance, total supply change correctly`, async() => {
                 let amount = new BN(10).pow(new BN(18));
                 await newKNC.mint(user, amount, { from: minter });
                 let userBalance = await newKNC.balanceOf(user);
                 await newKNC.approve(minter, amount.mul(new BN(2)), { from: user });
                 let allowance = await newKNC.allowance(user, minter);
+                let totalSupply = await newKNC.totalSupply();
                 await newKNC.burnFrom(user, amount, { from: minter });
                 Helper.assertEqual(
                     userBalance.sub(amount), await newKNC.balanceOf(user),
                 );
                 Helper.assertEqual(
                     allowance.sub(amount), await newKNC.allowance(user, minter),
+                );
+                Helper.assertEqual(
+                    totalSupply.sub(amount), await newKNC.totalSupply(),
                 );
             });
         });
@@ -401,7 +401,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
             );
         });
 
-        it(`test data changes and events`, async() => {
+        it(`test minter changes and events`, async() => {
             let tx = await newKNC.changeMinter(user, { from: minter });
             Helper.assertEqual(user, await newKNC.minter());
             expectEvent(tx, "MinterChanged", {
@@ -435,7 +435,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
             );
         });
 
-        it(`test data changes`, async() => {
+        it(`test balances change correctly`, async() => {
             let amount = new BN(10).pow(new BN(18));
             await token.transfer(newKNC.address, amount);
             let ownerBalance = await token.balanceOf(owner);

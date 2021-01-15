@@ -17,7 +17,7 @@ contract KyberNetworkTokenV2 is ERC20Burnable, Ownable {
     address public minter;
 
     event Minted(address indexed account, uint256 indexed amount, address indexed minter);
-    event BurntAndMinted(address indexed account, uint256 indexed amount);
+    event Migrated(address indexed account, uint256 indexed amount);
     event MinterChanged(address indexed oldMinter, address indexed newMinter);
 
     modifier onlyMinter() {
@@ -44,7 +44,7 @@ contract KyberNetworkTokenV2 is ERC20Burnable, Ownable {
         IERC20Burnable(oldKNC).burnFrom(msg.sender, amount);
 
         super._mint(msg.sender, amount);
-        emit BurntAndMinted(msg.sender, amount);
+        emit Migrated(msg.sender, amount);
     }
 
     function changeMinter(address newMinter) external onlyMinter {
