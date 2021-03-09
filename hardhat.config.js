@@ -1,5 +1,6 @@
 require("@nomiclabs/hardhat-truffle5");
 require("@nomiclabs/hardhat-web3");
+require('@openzeppelin/hardhat-upgrades');
 require('solidity-coverage');
 
 require('dotenv').config();

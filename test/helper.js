@@ -179,7 +179,7 @@ module.exports.assertAbsDiff = function(val1, val2, expectedDiffInPct, errorStr)
 }
 
 function assertEqual (val1, val2, errorStr) {
-    assert(new BN(val1).should.be.a.bignumber.that.equals(new BN(val2)), errorStr);
+    assert(new BN(val1.toString()).should.be.a.bignumber.that.equals(new BN(val2.toString())), errorStr);
 }
 
 module.exports.assertEqual = assertEqual;

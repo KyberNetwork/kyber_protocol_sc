@@ -1,16 +1,19 @@
 
-const Token = artifacts.require("Token.sol");
-const KyberNetworkTokenV2 = artifacts.require("KyberNetworkTokenV2.sol");
+let Token;
+let KyberNetworkTokenV2;
 
 const Helper = require("../helper.js");
 
-const BN = web3.utils.BN;
+const BN = ethers.BigNumber;
 const { expectEvent, expectRevert } = require('@openzeppelin/test-helpers');
 
-const { zeroAddress } = require("../helper.js");
+let { zeroBN, zeroAddress, precisionUnits } = require("../helper.js");
+const { web3 } = require("@openzeppelin/test-helpers/src/setup");
+precisionUnits = toEthersBN(precisionUnits);
 
 let oldKNC;
 let newKNC;
+let tokenProxy;
 let minter;
 let owner;
 let user;
@@ -18,112 +21,117 @@ let user;
 
 contract('KyberNetworkTokenV2', function(accounts) {
     before(`Global init data`, async() => {
-        user = accounts[1];
-        owner = accounts[2];
-        minter = accounts[3];
-        oldKNC = await Token.new("Kyber Network Crystal", "KNC", 18);
+        [deployer, user, owner, minter] = await ethers.getSigners();
+        Token = await ethers.getContractFactory('Token');
+        oldKNC = await Token.deploy("Kyber Network Crystal", "KNC", 18);
+        KyberNetworkTokenV2 = (await ethers.getContractFactory("KyberNetworkTokenV2")).connect(owner);
     });
 
     describe(`Test constructor`, async() => {
         it(`test invalid old knc or minter address`, async() => {
-            await expectRevert(
-                KyberNetworkTokenV2.new(zeroAddress, minter),
-                "invalid old knc"
+            // invalid old knc
+            await expectRevert.unspecified(
+                upgrades.deployProxy(KyberNetworkTokenV2, [zeroAddress, minter.address])
             );
-            await expectRevert(
-                KyberNetworkTokenV2.new(oldKNC.address, zeroAddress),
-                "invalid minter"
+            // invalid minter
+            await expectRevert.unspecified(
+                upgrades.deployProxy(KyberNetworkTokenV2, [oldKNC.address, zeroAddress])
             );
         });
 
         it(`test correct setup data after deployed`, async() => {
-            let contract = await KyberNetworkTokenV2.new(oldKNC.address, minter, { from: owner });
-            Helper.assertEqual(0, await contract.totalSupply());
-            Helper.assertEqual(oldKNC.address, await contract.oldKNC());
-            Helper.assertEqual(minter, await contract.minter());
-            Helper.assertEqual(owner, await contract.owner());
+            tokenProxy = await upgrades.deployProxy(KyberNetworkTokenV2, [oldKNC.address, minter.address]);
+            Helper.assertEqual(zeroBN, await tokenProxy.totalSupply());
+            Helper.assertEqual(oldKNC.address, await tokenProxy.oldKNC());
+            Helper.assertEqual(minter.address, await tokenProxy.minter());
+            Helper.assertEqual(owner.address, await tokenProxy.owner());
         });
     });
 
     describe(`Test mint`, async() => {
-        beforeEach(`init before each test`, async() => {
-            newKNC = await KyberNetworkTokenV2.new(oldKNC.address, minter, { from: owner });
+        beforeEach(`init new token implementation and proxy before each test`, async() => {
+            newKNC = await deployKNC(KyberNetworkTokenV2, [oldKNC.address, minter.address]);
         });
 
         it(`test mint reverts not minter`, async() => {
+            newKNC = newKNC.connect(user);
             await expectRevert(
-                newKNC.mint(user, new BN(10).pow(new BN(18)), { from: user }),
+                newKNC.mint(user.address, precisionUnits),
                 "only minter"
             );
             await expectRevert(
-                newKNC.mint(user, new BN(10).pow(new BN(18)), { from: owner }),
+                newKNC.mint(user.address, precisionUnits),
                 "only minter"
             );
         });
 
         it(`test mint reverts recipient is zero address`, async() => {
             await expectRevert(
-                newKNC.mint(zeroAddress, new BN(10).pow(new BN(18)), { from: minter }),
+                newKNC.connect(minter).mint(zeroAddress, precisionUnits),
                 "ERC20: mint to the zero address"
             );
         });
 
         it(`test mint reverts amount is too high`, async() => {
-            let maxUInt = (new BN(2).pow(new BN(256))).sub(new BN(1));
-            await newKNC.mint(user, maxUInt, { from: minter });
+            let maxUInt = ethers.constants.MaxUint256;
+            newKNC = newKNC.connect(minter);
+            await newKNC.mint(user.address, maxUInt);
             await expectRevert(
-                newKNC.mint(user, maxUInt, { from: minter }),
+                newKNC.mint(user.address, maxUInt),
                 "SafeMath: addition overflow"
             );
             await expectRevert(
-                newKNC.mint(user, new BN(1), { from: minter }),
+                newKNC.mint(user.address, ethers.constants.One),
                 "SafeMath: addition overflow"
             );
         });
 
         it(`test balance, total supply change correctly`, async() => {
-            let userBalance = await newKNC.balanceOf(user);
+            let userBalance = await newKNC.balanceOf(user.address);
             let totalSupply = await newKNC.totalSupply();
-            let amount = new BN(10).pow(new BN(20));
-            await newKNC.mint(user, amount, { from: minter });
+            let amount = new BN.from(10).pow(new BN.from(20));
+            await newKNC.connect(minter).mint(user.address, amount);
             Helper.assertEqual(
-                userBalance.iadd(amount),
-                await newKNC.balanceOf(user)
+                userBalance.add(amount),
+                await newKNC.balanceOf(user.address)
             );
             Helper.assertEqual(
-                totalSupply.iadd(amount),
+                totalSupply.add(amount),
                 await newKNC.totalSupply()
             )
         });
 
         it(`test mint events`, async() => {
-            let amount = new BN(10).pow(new BN(20));
-            let tx = await newKNC.mint(user, amount, { from: minter });
-            expectEvent(tx, "Minted", {
-                account: user,
-                amount: amount,
-                minter: minter
-            });
-            expectEvent(tx, "Transfer", {
+            let amount = new BN.from(10).pow(new BN.from(20));
+            let tx = await (await newKNC.connect(minter).mint(user.address, amount)).wait();
+            console.log(tx);
+            expectEvent(tx, 'Transfer', {
                 from: zeroAddress,
-                to: user,
+                to: user.address,
                 value: amount
+            });
+            expectEvent(tx, 'Minted', {
+                account: user.address,
+                amount: amount,
+                minter: minter.address
             });
         });
 
         it(`test mint after change minter, balance + total supply change correctly`, async() => {
-            let amount = new BN(10).pow(new BN(20));
-            await newKNC.mint(user, amount, { from: minter });
-            let userBalance = await newKNC.balanceOf(user);
+            let amount = new BN.from(10).pow(new BN.from(20));
+            newKNC = newKNC.connect(minter);
+            await newKNC.mint(user.address, amount);
+            let userBalance = await newKNC.balanceOf(user.address);
             let totalSupply = await newKNC.totalSupply();
-            await newKNC.changeMinter(user, { from: minter });
-            await newKNC.mint(user, amount, { from: user });
+            await newKNC.changeMinter(user);
+            newKNC = newKNC.connect(user);
+            await newKNC.mint(user.address, amount);
             Helper.assertEqual(
-                userBalance.iadd(amount),
-                await newKNC.balanceOf(user)
+                userBalance.add(amount),
+                await newKNC.balanceOf(user.address)
             );
             Helper.assertEqual(
-                totalSupply.iadd(amount),
+                totalSupply.add(amount),
                 await newKNC.totalSupply()
             )
         });
@@ -146,7 +154,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
         it(`test revert not enough allowance`, async() => {
             let userAllowance = await oldKNC.allowance(user, newKNC.address);
             if (userAllowance.eq(new BN(0))) {
-                userAllowance = new BN(10).pow(new BN(20));
+                userAllowance = new BN.from(10).pow(new BN.from(20));
                 await oldKNC.approve(newKNC.address, userAllowance, { from: user });
             }
             // transfer enough old knc token to user
@@ -157,7 +165,7 @@ contract('KyberNetworkTokenV2', function(accounts) {
         });
 
         it(`test old/new balances + total supplies change correctly and events`, async() => {
-            let amount = new BN(10).pow(new BN(20));
+            let amount = new BN.from(10).pow(new BN.from(20));
             await oldKNC.approve(newKNC.address, amount.mul(new BN(2)), { from: user });
             await oldKNC.transfer(user, amount.mul(new BN(2)));
             let userOldKncBalance = await oldKNC.balanceOf(user);
@@ -450,3 +458,15 @@ contract('KyberNetworkTokenV2', function(accounts) {
         });
     });
 });
+
+async function deployKNC(knc, ctor, tokenProxy) {
+    if (tokenProxy == undefined) {
+        return await upgrades.deployProxy(knc, ctor)
+    } else {
+        return await upgrades.upgradeProxy(tokenProxy.address, knc, ctor)
+    }
+}
+
+function toEthersBN(num) {
+    return new BN.from(num.toString());
+}
