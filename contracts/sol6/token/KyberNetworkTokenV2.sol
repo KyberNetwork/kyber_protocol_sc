@@ -26,7 +26,7 @@ contract KyberNetworkTokenV2 is OwnableUpgradeable, ERC20BurnableUpgradeable {
     }
 
     function initialize(address _oldKNC, address _minter)
-        public
+        external
         initializer
     {
         __ERC20_init("Kyber Network Crystal V2", "KNCv2");
