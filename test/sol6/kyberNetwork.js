@@ -940,8 +940,8 @@ contract('KyberNetwork', function(accounts) {
                 Helper.assertEqual(actualResult.worstRate, zeroBN, "worst rate not 0");
 
                 actualResult = await network.getExpectedRateWithHintAndFee(srcToken.address, srcToken.address, srcQty, platformFeeBps, emptyHint);
-                Helper.assertEqual(actualResult.expectedRate, zeroBN, "expected rate not 0");
-                Helper.assertEqual(actualResult.worstRate, zeroBN, "worst rate not 0");
+                Helper.assertEqual(actualResult.rateWithNetworkFee, zeroBN, "expected rate not 0");
+                Helper.assertEqual(actualResult.rateWithAllFees, zeroBN, "worst rate not 0");
 
                 //query ETH -> ETH
                 actualResult = await network.getExpectedRate(ethAddress, ethAddress, ethSrcQty);
@@ -949,8 +949,8 @@ contract('KyberNetwork', function(accounts) {
                 Helper.assertEqual(actualResult.worstRate, zeroBN, "worst rate not 0");
 
                 actualResult = await network.getExpectedRateWithHintAndFee(ethAddress, ethAddress, ethSrcQty, platformFeeBps, emptyHint);
-                Helper.assertEqual(actualResult.expectedRate, zeroBN, "expected rate not 0");
-                Helper.assertEqual(actualResult.worstRate, zeroBN, "worst rate not 0");
+                Helper.assertEqual(actualResult.rateWithNetworkFee, zeroBN, "expected rate not 0");
+                Helper.assertEqual(actualResult.rateWithAllFees, zeroBN, "worst rate not 0");
             });
 
             it("should return 0 rate for unlisted token", async() => {

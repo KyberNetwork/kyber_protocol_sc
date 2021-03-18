@@ -1,19 +1,19 @@
 pragma solidity 0.6.6;
 
-
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20BurnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 
 interface IERC20Burnable {
     function burnFrom(address _from, uint256 _value) external returns (bool);
 }
 
-contract KyberNetworkTokenV2 is ERC20Burnable, Ownable {
+contract KyberNetworkTokenV2 is OwnableUpgradeable, ERC20BurnableUpgradeable {
     using SafeERC20 for IERC20;
 
-    address public immutable oldKNC;
+    address public oldKNC;
     address public minter;
 
     event Minted(address indexed account, uint256 indexed amount, address indexed minter);
@@ -25,9 +25,12 @@ contract KyberNetworkTokenV2 is ERC20Burnable, Ownable {
         _;
     }
 
-    constructor(address _oldKNC, address _minter)
-        public ERC20("Kyber Network Crystal V2", "KNCv2")
+    function initialize(address _oldKNC, address _minter)
+        external
+        initializer
     {
+        __ERC20_init("Kyber Network Crystal V2", "KNCv2");
+        __Ownable_init();
         require(_oldKNC != address(0), "invalid old knc");
         require(_minter != address(0), "invalid minter");
         oldKNC = _oldKNC;
@@ -57,10 +60,7 @@ contract KyberNetworkTokenV2 is ERC20Burnable, Ownable {
 
     /// @dev emergency withdraw ERC20, can only call by the owner
     /// to withdraw tokens that have been sent to this address
-    function emergencyERC20Drain(
-        IERC20 token,
-        uint amount
-    ) external onlyOwner {
+    function emergencyERC20Drain(IERC20 token, uint256 amount) external onlyOwner {
         token.safeTransfer(owner(), amount);
     }
 }

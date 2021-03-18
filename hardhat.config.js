@@ -1,7 +1,10 @@
 require("@nomiclabs/hardhat-truffle5");
 require("@nomiclabs/hardhat-web3");
+require("@nomiclabs/hardhat-etherscan");
+require('@openzeppelin/hardhat-upgrades');
 require('solidity-coverage');
 
+require('./web3deployment/deployKNCv2');
 require('dotenv').config();
 
 module.exports = {
@@ -168,6 +171,7 @@ module.exports = {
 
 const INFURA_API_KEY = process.env.INFURA_API_KEY;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
+const ETHERSCAN_KEY = process.env.ETHERSCAN_KEY;
 
 if (INFURA_API_KEY != undefined && PRIVATE_KEY != undefined) {
   module.exports.networks.mainnet = {
@@ -192,5 +196,11 @@ if (INFURA_API_KEY != undefined && PRIVATE_KEY != undefined) {
     url: `https://rinkeby.infura.io/v3/${INFURA_API_KEY}`,
     accounts: [PRIVATE_KEY],
     timeout: 20000
+  };
+}
+
+if (ETHERSCAN_KEY != undefined) {
+  module.exports.etherscan = {
+    apiKey: ETHERSCAN_KEY
   };
 }
