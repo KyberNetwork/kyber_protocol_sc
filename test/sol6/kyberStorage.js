@@ -1042,7 +1042,7 @@ contract('KyberStorage', function(accounts) {
             let result = await kyberStorage.getReserveIdsPerTokenSrc(token.address);
             Helper.assertEqual(result.length, zeroBN, "T2E should not be listed");
             result = await kyberStorage.getReserveAddressesPerTokenSrc(token.address, 0, 0);
-            Helper.assertEqual(result[0], zeroBN, "T2E should not be listed");
+            Helper.assertEqual(result.length, zeroBN, "T2E should not be listed");
 
             result = await kyberStorage.getReserveIdsPerTokenDest(token.address);
             Helper.assertEqual(result.length, zeroBN, "E2T should not be listed");
@@ -1363,7 +1363,7 @@ contract('KyberStorage', function(accounts) {
                 for (let n = 1; j > 0; j = j >> 1, n = n * 2) {
                     pay.push(j % 2 == 1);
                 }
-                let originalResLength = result.length;
+                let originalResLength = pay.length;
                 //append the rest of pay array with false values
                 for (let k = 0; k < totalReserveTypes - originalResLength; k++) {
                     pay = pay.concat([false]);
@@ -1497,7 +1497,7 @@ contract('KyberStorage', function(accounts) {
                 for (let n = 1; j > 0; j = j >> 1, n = n * 2) {
                     rebate.push(j % 2 == 1);
                 }
-                let originalResLength = result.length;
+                let originalResLength = rebate.length;
                 //append the rest of array with false values
                 for (let k = 0; k < totalReserveTypes - originalResLength; k++) {
                     rebate = rebate.concat([false]);
