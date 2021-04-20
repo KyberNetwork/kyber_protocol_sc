@@ -5,6 +5,7 @@ require('@openzeppelin/hardhat-upgrades');
 require('solidity-coverage');
 
 require('./web3deployment/deployKNCv2');
+require('./web3deployment/deployFeeHandler');
 require('dotenv').config();
 
 module.exports = {
