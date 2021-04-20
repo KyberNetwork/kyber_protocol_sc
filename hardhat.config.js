@@ -168,7 +168,6 @@ module.exports = {
   }
 };
 
-
 const INFURA_API_KEY = process.env.INFURA_API_KEY;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const ETHERSCAN_KEY = process.env.ETHERSCAN_KEY;
@@ -177,7 +176,8 @@ if (INFURA_API_KEY != undefined && PRIVATE_KEY != undefined) {
   module.exports.networks.mainnet = {
     url: `https://mainnet.infura.io/v3/${INFURA_API_KEY}`,
     accounts: [PRIVATE_KEY],
-    timeout: 20000
+    gasPrice: 70000000000,
+    timeout: 300000
   };
 
   module.exports.networks.ropsten = {
