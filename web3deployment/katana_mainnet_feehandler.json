@@ -1,0 +1,9 @@
+{
+    "kyberProxy": "0x9AAb3f75489902f3a48495025729a0AF77d4b11e",
+    "kncV2": "0xdeFA4e8a7bcBA345F687a2f1456F5Edd9CE97202",
+    "burnBlockInterval": "30",
+    "daoOperator": "0xe6a7338cba0a1070adfb22c07115299605454713",
+    "treasury": "0x0E590bB5F02A0c38888bFFb45DeE050b8fB60Bda",
+    "rewardBps": "7275",
+    "rebateBps": "2304"
+}
