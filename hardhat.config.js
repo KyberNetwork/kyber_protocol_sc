@@ -172,6 +172,15 @@ const INFURA_API_KEY = process.env.INFURA_API_KEY;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const ETHERSCAN_KEY = process.env.ETHERSCAN_KEY;
 
+if (PRIVATE_KEY != undefined) {
+  module.exports.networks.binanceTest = {
+    url: `https://data-seed-prebsc-1-s1.binance.org:8545`,
+    accounts: [PRIVATE_KEY],
+    gasPrice: 20000000000,
+    timeout: 300000
+  }
+}
+
 if (INFURA_API_KEY != undefined && PRIVATE_KEY != undefined) {
   module.exports.networks.mainnet = {
     url: `https://mainnet.infura.io/v3/${INFURA_API_KEY}`,

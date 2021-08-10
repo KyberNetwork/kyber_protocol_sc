@@ -1,9 +1,11 @@
 const fs = require('fs');
 const path = require('path');
-const configPath = path.join(__dirname, './kncv2_input.json');
-const configParams = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
-task('newKNC', 'deploys new KNCv2 token').setAction(async () => {
+task('newKNC', 'deploys new KNCv2 token')
+  .addParam('input', 'Input JSON file for deployment')
+  .setAction(async (taskArgs) => {
+  const configPath = path.join(__dirname, taskArgs.input);
+  const configParams = JSON.parse(fs.readFileSync(configPath, 'utf8'));
   // note: gas price is set in hardhat config
   const BN = ethers.BigNumber;
   const [deployer] = await ethers.getSigners();
